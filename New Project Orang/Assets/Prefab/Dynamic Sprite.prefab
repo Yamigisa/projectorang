@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 5545301170263876634}
   - component: {fileID: 3894875295056020339}
   - component: {fileID: -8220986684204479886}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Dynamic Sprite
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,7 +136,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: f5c99491ed7d4bc4494d80ca74112aa7, type: 2}
   m_IncludeLayers:
@@ -147,7 +147,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &-8220986684204479886
 MonoBehaviour:
@@ -162,3 +162,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpeed: 10
+  bulletLifeTime: 10
