@@ -11,10 +11,11 @@ public class Bullet : NetworkBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+
         rb.velocity = transform.up * bulletSpeed;
         rb.gravityScale = 0;
 
-        // Only the server should handle lifetime destruction
         if (IsServer)
         {
             StartCoroutine(DestroyBulletAfterLifetime());
@@ -23,7 +24,6 @@ public class Bullet : NetworkBehaviour
 
     private void Update()
     {
-        // Keep the bullet's speed constant
         rb.velocity = rb.velocity.normalized * bulletSpeed;
     }
 
@@ -40,13 +40,16 @@ public class Bullet : NetworkBehaviour
     {
         Debug.Log("Bullet collided with: " + collision.gameObject.name);
 
-        if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Bullet"))
+        if (collision.gameObject.CompareTag("Obstacle") /*|| collision.gameObject.CompareTag("Bullet")*/)
+        {
+            ReflectBullet(collision);
+        }
+        else if(collision.gameObject.CompareTag("Bullet"))
         {
             ReflectBullet(collision);
         }
         else if (collision.gameObject.CompareTag("Player"))
         {
-            // Only apply damage and destroy on the server
             if (IsServer)
             {
                 HandlePlayerCollision(collision);
@@ -55,7 +58,6 @@ public class Bullet : NetworkBehaviour
         }
         else
         {
-            // Only the server should despawn the bullet
             if (IsServer)
             {
                 DespawnBullet();
@@ -71,10 +73,11 @@ public class Bullet : NetworkBehaviour
 
     private void HandlePlayerCollision(Collision2D collision)
     {
-        PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
-        if (playerHealth != null)
+        PlayerStats playerStats = collision.gameObject.GetComponent<PlayerStats>();
+        if (playerStats != null)
         {
-            playerHealth.TakeDamage(1);
+            playerStats.TakeDamage(1);
+
         }
     }
 

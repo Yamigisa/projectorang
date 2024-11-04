@@ -1,14 +1,15 @@
 using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
-    // Start is called before the first frame update
+    public static GameManager instance;
     void Start()
     {
+        instance = this;
+
         NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
         if(RelayManager.instance.isHost)
         {
@@ -30,5 +31,23 @@ public class GameManager : MonoBehaviour
         response.Approved = true;   
         response.CreatePlayerObject = true;
         response.Pending = false;
+    }
+
+    public void Respawn(PlayerStats playerStats)
+    {
+        Debug.Log("Respawn");
+        if(!IsServer) return;
+    }
+    public IEnumerator RespawnCoroutine(PlayerStats playerStats)
+    {
+        Debug.Log("started coroutine respawn");
+        yield return new WaitForSeconds(2f); 
+
+        Debug.Log("Couroutine respanw finished");
+        playerStats.health = 1; 
+        playerStats.isActive.Value = true;
+
+        playerStats.gameObject.SetActive(true);
+        playerStats.UpdatePosition();
     }
 }

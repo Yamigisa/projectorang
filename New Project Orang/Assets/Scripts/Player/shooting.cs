@@ -15,9 +15,15 @@ public class Shooting : NetworkBehaviour
     public int maxBulletsBeforeCooldown = 6;
     public float cooldownTime = 10f;
 
+    private PlayerStats playerStats;
+
+    void Start()
+    {
+        playerStats = GetComponent<PlayerStats>();
+    }
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !isOnCooldown && IsOwner)
+        if (Input.GetMouseButtonDown(0) && !isOnCooldown && IsOwner && playerStats.isActive.Value)
         {
             ShootServerRPC();
         }

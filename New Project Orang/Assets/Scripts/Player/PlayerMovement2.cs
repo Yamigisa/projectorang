@@ -42,7 +42,7 @@ public class PlayerMovement2 : NetworkBehaviour
 
     [ServerRpc(RequireOwnership = false)]
 
-    private void UpdatePositionServerRPC()
+    public void UpdatePositionServerRPC()
     {
         transform.position = new Vector3(Random.Range(positionRange,-positionRange), Random.Range(positionRange,-positionRange), 0);
         transform.rotation = new Quaternion(0,0,0,0);
