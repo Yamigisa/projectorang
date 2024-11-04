@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 182756273}
   m_Layer: 0
   m_Name: Square (3)
-  m_TagString: Wall
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -530,7 +530,7 @@ GameObject:
   - component: {fileID: 599922229}
   m_Layer: 0
   m_Name: Square
-  m_TagString: Wall
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1039,7 +1039,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1038617357}
-    PlayerPrefab: {fileID: 2180412918771346513, guid: b7fa61b04a6838d49bb07f9bd66bd62c, type: 3}
+    PlayerPrefab: {fileID: 3664208826173072639, guid: 6b18525f8e22f4b42860f7b563f6aad4, type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: f81fa7ccd63d834489e53a19b0c113a5, type: 2}
@@ -1157,7 +1157,7 @@ GameObject:
   - component: {fileID: 1165864780}
   m_Layer: 0
   m_Name: Square (1)
-  m_TagString: Wall
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2028,7 +2028,7 @@ GameObject:
   - component: {fileID: 2103555491}
   m_Layer: 0
   m_Name: Square (2)
-  m_TagString: Wall
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

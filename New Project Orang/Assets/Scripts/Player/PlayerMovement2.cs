@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerMovement2 : MonoBehaviour
+public class PlayerMovement2 : NetworkBehaviour
 {
     public float moveSpeed = 5f;
     public float rotationSpeed = 10f;
@@ -10,6 +11,7 @@ public class PlayerMovement2 : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 movement;
 
+    [SerializeField] private float positionRange = 5f;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -19,6 +21,11 @@ public class PlayerMovement2 : MonoBehaviour
     {
         movement.x = Input.GetAxis("Horizontal");
         movement.y = Input.GetAxis("Vertical");
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        UpdatePositionServerRPC();
     }
 
     void FixedUpdate()
@@ -32,4 +39,13 @@ public class PlayerMovement2 : MonoBehaviour
 
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
+
+    [ServerRpc(RequireOwnership = false)]
+
+    private void UpdatePositionServerRPC()
+    {
+        transform.position = new Vector3(Random.Range(positionRange,-positionRange), Random.Range(positionRange,-positionRange), 0);
+        transform.rotation = new Quaternion(0,0,0,0);
+    }
+
 }

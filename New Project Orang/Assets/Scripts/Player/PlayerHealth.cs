@@ -1,25 +1,58 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : NetworkBehaviour
 {
-    public int health = 1; // Health pemain, set ke 1 untuk mati dengan satu peluru
+    public int health = 1; // Set to 1 for one-shot kill
 
-    // Fungsi untuk menerima damage
+    // Networked variable to synchronize active state
+    private NetworkVariable<bool> isActive = new NetworkVariable<bool>(true);
+
+    private void Start()
+    {
+        // Apply the initial active state to match the NetworkVariable
+        gameObject.SetActive(isActive.Value);
+    }
+
+    private void Update()
+    {
+        // Continuously apply the active state from the NetworkVariable
+        gameObject.SetActive(isActive.Value);
+    }
+
+    // Function to receive damage
     public void TakeDamage(int damage)
     {
-        health -= damage; // Kurangi health sesuai damage yang diterima
+        if (!IsServer) return; // Only the server should modify health
+
+        health -= damage;
 
         if (health <= 0)
         {
-            Die(); // Panggil fungsi Die jika health habis
+            Die();
         }
     }
 
-    // Fungsi kematian pemain
-    void Die()
+    private void Die()
     {
-        Debug.Log("Player has died!");
-        // Kamu bisa menambahkan efek mati di sini, seperti animasi, menonaktifkan objek, dsb.
-        gameObject.SetActive(false); // Nonaktifkan pemain
+        isActive.Value = false; // Update the NetworkVariable to make the player inactive across clients
+    }
+
+    private void OnEnable()
+    {
+        // Register to be notified of NetworkVariable changes
+        isActive.OnValueChanged += OnIsActiveChanged;
+    }
+
+    private void OnDisable()
+    {
+        // Unregister from the NetworkVariable changes
+        isActive.OnValueChanged -= OnIsActiveChanged;
+    }
+
+    // Method triggered when isActive value changes
+    private void OnIsActiveChanged(bool previousValue, bool newValue)
+    {
+        gameObject.SetActive(newValue); // Set active state according to the NetworkVariable
     }
 }
