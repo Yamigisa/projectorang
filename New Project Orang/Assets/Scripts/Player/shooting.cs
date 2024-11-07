@@ -8,62 +8,84 @@ public class Shooting : NetworkBehaviour
     public GameObject bulletPrefab;
     public Transform firePoint;
     public float bulletSpeed = 10f;
-    public float bulletLifeTime = 20f;
 
-    private int bulletsShot = 0;
-    private bool isOnCooldown = false;
-    public int maxBulletsBeforeCooldown = 6;
-    public float cooldownTime = 10f;
+    private bool shotgunActive = false;
+    private bool burstFireActive = false;
 
-    private PlayerStats playerStats;
+    private int burstFireShots = 0;
+    private float powerUpDuration = 60f;
 
-    void Start()
-    {
-        playerStats = GetComponent<PlayerStats>();
-    }
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !isOnCooldown && IsOwner && playerStats.isActive.Value)
+        if (Input.GetMouseButtonDown(0))
         {
-            ShootServerRPC();
+            if (shotgunActive)
+            {
+                ShootShotgun();
+            }
+            else if (burstFireActive && burstFireShots < 6)
+            {
+                StartCoroutine(ShootBurstFire());
+                burstFireShots++;
+            }
+            else
+            {
+                Shoot();
+            }
         }
     }
 
-    IEnumerator Cooldown()
-    {
-        isOnCooldown = true;
-        yield return new WaitForSeconds(cooldownTime);
-        bulletsShot = 0;
-        isOnCooldown = false;
-    }
-
-    [ServerRpc]
-    private void ShootServerRPC()
+    void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.velocity = firePoint.up * bulletSpeed;
+    }
 
-        NetworkObject networkBullet = bullet.GetComponent<NetworkObject>();
-        networkBullet.Spawn();
+    void ShootShotgun()
+    {
+        float angleOffset = 15f;
 
-        StartCoroutine(DestroyBulletAfterLifetime(networkBullet));
-
-        bulletsShot++;
-
-        if (bulletsShot >= maxBulletsBeforeCooldown)
+        for (int i = -1; i <= 1; i++)
         {
-            StartCoroutine(Cooldown());
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.Euler(0, 0, firePoint.eulerAngles.z + (angleOffset * i)));
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            rb.velocity = bullet.transform.up * bulletSpeed;
         }
     }
 
-    private IEnumerator DestroyBulletAfterLifetime(NetworkObject bullet)
+    IEnumerator ShootBurstFire()
     {
-        yield return new WaitForSeconds(bulletLifeTime);
-        
-        if (IsServer && bullet != null && bullet.IsSpawned)
+        for (int i = 0; i < 4; i++)
         {
-            bullet.Despawn();
+            Shoot();
+            yield return new WaitForSeconds(0.1f);
         }
+        if (burstFireShots >= 6)
+        {
+            burstFireActive = false;
+            burstFireShots = 0;
+        }
+    }
+
+    public void ActivatePowerUp(PowerUp.PowerUpType powerUpType)
+    {
+        if (powerUpType == PowerUp.PowerUpType.Shotgun)
+        {
+            shotgunActive = true;
+            StartCoroutine(ResetPowerUpAfterDuration(() => shotgunActive = false));
+        }
+        else if (powerUpType == PowerUp.PowerUpType.BurstFire)
+        {
+            burstFireActive = true;
+            burstFireShots = 0;
+            StartCoroutine(ResetPowerUpAfterDuration(() => burstFireActive = false));
+        }
+    }
+
+    private IEnumerator ResetPowerUpAfterDuration(System.Action onComplete)
+    {
+        yield return new WaitForSeconds(powerUpDuration);
+        onComplete.Invoke();
     }
 }
