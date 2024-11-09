@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +10,7 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private Button createButton;
     [SerializeField] private Button joinButton;
     [SerializeField] private Button submitButton;
+    [SerializeField] private Button backButton;
     
     [SerializeField] private GameObject buttonsObject;
     [SerializeField] private GameObject lobbyPanel;
@@ -18,11 +18,12 @@ public class MainMenuController : MonoBehaviour
 
     [SerializeField] private TMP_Text codeText;
 
-    void OnEnable()
+    void Start()
     {
         createButton.onClick.AddListener(CreateLobby);
-        joinButton.onClick.AddListener(JoinLobby);
+        joinButton.onClick.AddListener(() => StartCoroutine(ActivateLobby(0.5f)));
         submitButton.onClick.AddListener(SubmitCode);
+        backButton.onClick.AddListener(() => StartCoroutine(BackToMainMenu(0.5f)));
     }
 
     void OnDisable()
@@ -30,6 +31,7 @@ public class MainMenuController : MonoBehaviour
         createButton.onClick.RemoveAllListeners();
         joinButton.onClick.RemoveAllListeners();
         submitButton.onClick.RemoveAllListeners();
+        backButton.onClick.RemoveAllListeners();
     }
 
     private async void CreateLobby()
@@ -42,12 +44,6 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    private void JoinLobby()
-    {
-        joinPanel.SetActive(true);
-        buttonsObject.SetActive(false);
-    }
-
     private async void SubmitCode()
     {
         string code = codeText.text;
@@ -56,9 +52,32 @@ public class MainMenuController : MonoBehaviour
         bool succeeded = await GameLobbyManager.instance.JoinLobby(code);
         if(succeeded)
         {
-            joinPanel.SetActive(false);
-            lobbyPanel.SetActive(true);
+            StartCoroutine(JoinLobbyAsClient(0.5f));
         }
+    }
+
+    private IEnumerator JoinLobbyAsClient(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        joinPanel.SetActive(false);
+        lobbyPanel.SetActive(true);
+    }
+
+    private IEnumerator ActivateLobby(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        joinPanel.SetActive(true);
+        buttonsObject.SetActive(false);
+    }
+
+    public IEnumerator BackToMainMenu(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        joinPanel.SetActive(false);
+        buttonsObject.SetActive(true);
     }
 }
 }

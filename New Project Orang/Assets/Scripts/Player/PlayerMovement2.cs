@@ -3,49 +3,42 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerMovement2 : NetworkBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
-    public float moveSpeed = 5f;
-    public float rotationSpeed = 10f;
+    [SerializeField] private float movementSpeed = 5f;
 
-    private Rigidbody2D rb;
-    private Vector2 movement;
-
-    [SerializeField] private float positionRange = 5f;
-    void Start()
+    public override void OnNetworkSpawn()
     {
-        rb = GetComponent<Rigidbody2D>();
+        if (IsOwner)
+        {
+            // Get the spawn point based on player index
+            int playerId = (int)OwnerClientId; // OwnerClientId is the unique ID for the client that owns the object
+            Transform spawnPoint = GameManager.instance.GetSpawnPoint(playerId);
+
+            // Update the position and rotation to match the spawn point
+            UpdatePositionServerRPC(spawnPoint.position, spawnPoint.rotation);
+        }
     }
 
     void Update()
     {
-        movement.x = Input.GetAxis("Horizontal");
-        movement.y = Input.GetAxis("Vertical");
-    }
+        if (!IsOwner) return;
 
-    public override void OnNetworkSpawn()
-    {
-        UpdatePositionServerRPC();
-    }
+        // Handle movement logic
+        float horizontalInput = Input.GetAxis("Horizontal"); 
+        float verticalInput = Input.GetAxis("Vertical");
 
-    void FixedUpdate()
-    {
-        if (movement != Vector2.zero)
-        {
-            float angle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg - 90f;
-            Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime); // Interpolasi rotasi agar lebih halus
-        }
+        Vector3 movementDirection = new Vector3(horizontalInput, verticalInput, 0);
+        movementDirection.Normalize();
 
-        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+        transform.Translate(movementDirection * movementSpeed * Time.deltaTime, Space.World);
     }
 
     [ServerRpc(RequireOwnership = false)]
-
-    public void UpdatePositionServerRPC()
+    public void UpdatePositionServerRPC(Vector3 position, Quaternion rotation)
     {
-        transform.position = new Vector3(Random.Range(positionRange,-positionRange), Random.Range(positionRange,-positionRange), 0);
-        transform.rotation = new Quaternion(0,0,0,0);
+        // Update the position and rotation on the server to sync with other clients
+        transform.position = position;
+        transform.rotation = rotation;
     }
-
 }

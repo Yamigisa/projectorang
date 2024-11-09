@@ -8,10 +8,10 @@ public class PlayerStats : NetworkBehaviour
     public NetworkVariable<bool> isActive = new NetworkVariable<bool>(true);
     public NetworkVariable<int> score = new NetworkVariable<int>();
 
-    private PlayerMovement2 playerMovement;
+    private PlayerMovement playerMovement;
     private void Start()
     {
-        playerMovement = GetComponent<PlayerMovement2>();    
+        playerMovement = GetComponent<PlayerMovement>();    
         SetRendererActive(isActive.Value);
     }
 
@@ -33,6 +33,7 @@ public class PlayerStats : NetworkBehaviour
 
     private void Die()
     {
+        GameManager.instance.ShakeCameraClientRpc(GetComponent<NetworkObject>().NetworkObjectId);
         AddScore(false,100);
         isActive.Value = false;
         StartCoroutine(GameManager.instance.RespawnCoroutine(this));
@@ -40,10 +41,7 @@ public class PlayerStats : NetworkBehaviour
 
     public void UpdatePosition()
     {
-        if (playerMovement != null)
-        {
-            playerMovement.UpdatePositionServerRPC();
-        }
+        playerMovement.UpdatePositionServerRPC(GameManager.instance.GetSpawnPoint((int)OwnerClientId).position, GameManager.instance.GetSpawnPoint((int)OwnerClientId).rotation );
     }
     private void OnEnable()
     {
