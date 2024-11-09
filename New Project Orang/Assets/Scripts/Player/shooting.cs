@@ -17,29 +17,37 @@ public class Shooting : NetworkBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (IsOwner) 
         {
-            if (shotgunActive)
+            if (Input.GetMouseButtonDown(0))
             {
-                ShootShotgun();
-            }
-            else if (burstFireActive && burstFireShots < 6)
-            {
-                StartCoroutine(ShootBurstFire());
-                burstFireShots++;
-            }
-            else
-            {
-                Shoot();
+                if (shotgunActive)
+                {
+                    ShootShotgun();
+                }
+                else if (burstFireActive && burstFireShots < 6)
+                {
+                    StartCoroutine(ShootBurstFire());
+                    burstFireShots++;
+                }
+                else
+                {
+                    Shoot();
+                }
             }
         }
     }
 
     void Shoot()
     {
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.velocity = firePoint.up * bulletSpeed;
+        if (IsServer)
+        {
+            SpawnBullet(firePoint.position, firePoint.rotation);
+        }
+        else
+        {
+            ShootServerRpc(firePoint.position, firePoint.rotation);
+        }
     }
 
     void ShootShotgun()
@@ -48,9 +56,14 @@ public class Shooting : NetworkBehaviour
 
         for (int i = -1; i <= 1; i++)
         {
-            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.Euler(0, 0, firePoint.eulerAngles.z + (angleOffset * i)));
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            rb.velocity = bullet.transform.up * bulletSpeed;
+            if (IsServer)
+            {
+                SpawnBullet(firePoint.position, Quaternion.Euler(0, 0, firePoint.eulerAngles.z + (angleOffset * i)));
+            }
+            else
+            {
+                ShootServerRpc(firePoint.position, Quaternion.Euler(0, 0, firePoint.eulerAngles.z + (angleOffset * i)));
+            }
         }
     }
 
@@ -66,6 +79,21 @@ public class Shooting : NetworkBehaviour
             burstFireActive = false;
             burstFireShots = 0;
         }
+    }
+
+    [ServerRpc]
+    void ShootServerRpc(Vector3 position, Quaternion rotation)
+    {
+        SpawnBullet(position, rotation);
+    }
+
+    void SpawnBullet(Vector3 position, Quaternion rotation)
+    {
+        GameObject bullet = Instantiate(bulletPrefab, position, rotation);
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        rb.velocity = bullet.transform.up * bulletSpeed;
+
+        bullet.GetComponent<NetworkObject>().Spawn();
     }
 
     public void ActivatePowerUp(PowerUp.PowerUpType powerUpType)

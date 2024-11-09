@@ -5,21 +5,23 @@ using UnityEngine;
 public class Bullet : NetworkBehaviour
 {
     public float bulletSpeed = 10f;
-    public float bulletLifeTime = 10f;
+    public float bulletLifeTime;
     private Rigidbody2D rb;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
-
         rb.velocity = transform.up * bulletSpeed;
         rb.gravityScale = 0;
 
+        // Start bullet lifetime coroutine (runs on the server)
         if (IsServer)
         {
+            Debug.Log("Bullet on server");
             StartCoroutine(DestroyBulletAfterLifetime());
         }
+        else
+        Debug.Log("Bullet not on server");
     }
 
     private void Update()
@@ -30,26 +32,19 @@ public class Bullet : NetworkBehaviour
     private IEnumerator DestroyBulletAfterLifetime()
     {
         yield return new WaitForSeconds(bulletLifeTime);
-        if (IsServer)
-        {
-            DespawnBullet();
-        }
+
+        DespawnBullet();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Bullet collided with: " + collision.gameObject.name);
-
-        if (collision.gameObject.CompareTag("Obstacle") /*|| collision.gameObject.CompareTag("Bullet")*/)
-        {
-            ReflectBullet(collision);
-        }
-        else if(collision.gameObject.CompareTag("Bullet"))
+        if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Bullet"))
         {
             ReflectBullet(collision);
         }
         else if (collision.gameObject.CompareTag("Player"))
         {
+            Debug.Log("Bullet collided with player");
             if (IsServer)
             {
                 HandlePlayerCollision(collision);
@@ -77,7 +72,6 @@ public class Bullet : NetworkBehaviour
         if (playerStats != null)
         {
             playerStats.TakeDamage(1);
-
         }
     }
 
@@ -86,6 +80,10 @@ public class Bullet : NetworkBehaviour
         if (IsSpawned)
         {
             GetComponent<NetworkObject>().Despawn();
+        }
+        else
+        {
+            Debug.Log("Bullet is not spawned, cannot despawn");
         }
     }
 }
