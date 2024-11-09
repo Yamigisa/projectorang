@@ -8,10 +8,10 @@ public class PlayerStats : NetworkBehaviour
     public NetworkVariable<bool> isActive = new NetworkVariable<bool>(true);
     public NetworkVariable<int> score = new NetworkVariable<int>();
 
-    private PlayerMovement2 playerMovement;
+    private PlayerMovement playerMovement;
     private void Start()
     {
-        playerMovement = GetComponent<PlayerMovement2>();    
+        playerMovement = GetComponent<PlayerMovement>();    
         SetRendererActive(isActive.Value);
     }
 
@@ -41,7 +41,7 @@ public class PlayerStats : NetworkBehaviour
 
     public void UpdatePosition()
     {
-        playerMovement.UpdatePositionServerRPC();
+        playerMovement.UpdatePositionServerRPC(GameManager.instance.GetSpawnPoint((int)OwnerClientId).position, GameManager.instance.GetSpawnPoint((int)OwnerClientId).rotation );
     }
     private void OnEnable()
     {
