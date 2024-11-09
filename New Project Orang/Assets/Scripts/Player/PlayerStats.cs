@@ -33,6 +33,7 @@ public class PlayerStats : NetworkBehaviour
 
     private void Die()
     {
+        GameManager.instance.ShakeCameraClientRpc(GetComponent<NetworkObject>().NetworkObjectId);
         AddScore(false,100);
         isActive.Value = false;
         StartCoroutine(GameManager.instance.RespawnCoroutine(this));
@@ -40,10 +41,7 @@ public class PlayerStats : NetworkBehaviour
 
     public void UpdatePosition()
     {
-        if (playerMovement != null)
-        {
-            playerMovement.UpdatePositionServerRPC();
-        }
+        playerMovement.UpdatePositionServerRPC();
     }
     private void OnEnable()
     {

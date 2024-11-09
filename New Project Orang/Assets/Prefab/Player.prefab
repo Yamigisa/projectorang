@@ -313,7 +313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3655693648
+  GlobalObjectIdHash: 2466308345
   InScenePlacedSourceGlobalObjectIdHash: 2466308345
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -337,9 +337,6 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1140973810854168156, guid: cf1065dc0dbe78741b7080f54a27b958, type: 3}
   firePoint: {fileID: 2709003996649844515}
   bulletSpeed: 10
-  bulletLifeTime: 20
-  maxBulletsBeforeCooldown: 6
-  cooldownTime: 10
 --- !u!114 &7734686843871552817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,6 +352,8 @@ MonoBehaviour:
   health: 1
   isActive:
     m_InternalValue: 1
+  score:
+    m_InternalValue: 0
 --- !u!114 &5958383889293003221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,11 +412,149 @@ MonoBehaviour:
   playerHUD: {fileID: 7411164289936254450}
   playerName: {fileID: 9031914219674314413}
   playerScore: {fileID: 3256120176210847259}
+  networkPlayerName:
+    m_InternalValue:
+      utf8LengthInBytes: 8
+      bytes:
+        offset0000:
+          byte0000: 80
+          byte0001: 108
+          byte0002: 97
+          byte0003: 121
+          byte0004: 101
+          byte0005: 114
+          byte0006: 32
+          byte0007: 48
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0016:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0032:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0048:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0064:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0080:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0096:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        byte0112: 0
+        byte0113: 0
+        byte0114: 0
+        byte0115: 0
+        byte0116: 0
+        byte0117: 0
+        byte0118: 0
+        byte0119: 0
+        byte0120: 0
+        byte0121: 0
+        byte0122: 0
+        byte0123: 0
+        byte0124: 0
+        byte0125: 0
   color:
   - {r: 0, g: 0, b: 0, a: 1}
   - {r: 0.83396226, g: 0.13060157, b: 0.13060157, a: 1}
   - {r: 0.37945884, g: 0.7795352, b: 0.78867924, a: 1}
   - {r: 0.78584504, g: 0.32299745, b: 0.8113208, a: 1}
+  playerStats: {fileID: 0}
 --- !u!114 &3343201291680346893
 MonoBehaviour:
   m_ObjectHideFlags: 0

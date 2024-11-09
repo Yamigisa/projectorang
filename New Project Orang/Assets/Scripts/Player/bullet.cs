@@ -14,14 +14,10 @@ public class Bullet : NetworkBehaviour
         rb.velocity = transform.up * bulletSpeed;
         rb.gravityScale = 0;
 
-        // Start bullet lifetime coroutine (runs on the server)
         if (IsServer)
         {
-            Debug.Log("Bullet on server");
             StartCoroutine(DestroyBulletAfterLifetime());
         }
-        else
-        Debug.Log("Bullet not on server");
     }
 
     private void Update()
@@ -80,10 +76,6 @@ public class Bullet : NetworkBehaviour
         if (IsSpawned)
         {
             GetComponent<NetworkObject>().Despawn();
-        }
-        else
-        {
-            Debug.Log("Bullet is not spawned, cannot despawn");
         }
     }
 }

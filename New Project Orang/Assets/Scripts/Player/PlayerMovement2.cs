@@ -11,7 +11,7 @@ public class PlayerMovement2 : NetworkBehaviour
     private Rigidbody2D rb;
     private Vector2 movement;
 
-    [SerializeField] private float positionRange = 5f;
+    [SerializeField] private float positionRange = 3f;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -25,6 +25,7 @@ public class PlayerMovement2 : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        if(!IsOwner)
         UpdatePositionServerRPC();
     }
 

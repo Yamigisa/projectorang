@@ -1,14 +1,22 @@
 using System.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
 {
     public static GameManager instance;
+    public Camera mainCamera; 
+
+    public Transform[] spawnPoints;
+
     void Start()
     {
         instance = this;
+
+        mainCamera = Camera.main;
 
         NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
         if(RelayManager.instance.isHost)
@@ -33,21 +41,54 @@ public class GameManager : NetworkBehaviour
         response.Pending = false;
     }
 
-    public void Respawn(PlayerStats playerStats)
-    {
-        Debug.Log("Respawn");
-        if(!IsServer) return;
+    public Transform GetSpawnPoint(int playerId)
+    {   
+        return spawnPoints[playerId % spawnPoints.Length];
     }
+
     public IEnumerator RespawnCoroutine(PlayerStats playerStats)
     {
-        Debug.Log("started coroutine respawn");
         yield return new WaitForSeconds(2f); 
 
-        Debug.Log("Couroutine respanw finished");
         playerStats.health = 1; 
         playerStats.isActive.Value = true;
 
         playerStats.gameObject.SetActive(true);
         playerStats.UpdatePosition();
+    }
+
+    [ClientRpc]
+    public void ShakeCameraClientRpc(ulong networkObjectId)
+    {
+        if (NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(NetworkManager.Singleton.LocalClientId).NetworkObjectId == networkObjectId)
+        {
+            StartCoroutine(CameraShakeCoroutine());
+        }
+    }
+
+    private IEnumerator CameraShakeCoroutine()
+    {
+        Vector3 originalPosition = mainCamera.transform.position;
+        float shakeAmount = 0.1f; 
+        float shakeDuration = 0.5f;
+
+        float elapsed = 0f;
+        while (elapsed < shakeDuration)
+        {
+            Vector3 randomOffset = Random.insideUnitSphere * shakeAmount;
+            mainCamera.transform.position = originalPosition + randomOffset;
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        mainCamera.transform.position = originalPosition;
+    }
+    
+    public void BackToMainMenu()
+    {
+        NetworkManager.Singleton.Shutdown();
+
+        SceneManager.LoadScene("Main Menu");
     }
 }

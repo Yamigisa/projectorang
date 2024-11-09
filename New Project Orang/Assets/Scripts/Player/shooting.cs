@@ -14,25 +14,35 @@ public class Shooting : NetworkBehaviour
 
     private int burstFireShots = 0;
     private float powerUpDuration = 60f;
+    
+    private PlayerStats playerStats;
+
+    void Start()
+    {
+        playerStats = GetComponent<PlayerStats>();
+    }
 
     void Update()
     {
         if (IsOwner) 
         {
-            if (Input.GetMouseButtonDown(0))
+            if(playerStats.isActive.Value)
             {
-                if (shotgunActive)
+                if (Input.GetMouseButtonDown(0))
                 {
-                    ShootShotgun();
-                }
-                else if (burstFireActive && burstFireShots < 6)
-                {
-                    StartCoroutine(ShootBurstFire());
-                    burstFireShots++;
-                }
-                else
-                {
-                    Shoot();
+                    if (shotgunActive)
+                    {
+                        ShootShotgun();
+                    }
+                    else if (burstFireActive && burstFireShots < 6)
+                    {
+                        StartCoroutine(ShootBurstFire());
+                        burstFireShots++;
+                    }
+                    else
+                    {
+                        Shoot();
+                    }
                 }
             }
         }
