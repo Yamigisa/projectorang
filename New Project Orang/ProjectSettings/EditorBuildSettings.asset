@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Ridho.unity
     guid: d7f5950109f8ca449b2c7bba209e694f
   - enabled: 1
+    path: Assets/Scenes/Ridho 1.unity
+    guid: 897ad5253590e3c48b866f9a1d07d93d
+  - enabled: 1
     path: Assets/Scenes/Mas Jastin.unity
     guid: ca4ab26d973f5434aa71fb3906383f13
   - enabled: 1

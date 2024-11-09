@@ -6,11 +6,11 @@ public class LobbyData
     private string _relayJoinCode;
     private string _sceneName;
 
-    public string SceneName = "Ridho";
-        
+    public string SceneName = "Ridho 1";
+
     public string RelayJoinCode
     {
-        get => _relayJoinCode; 
+        get => _relayJoinCode;
         set => _relayJoinCode = value;
     }
 
@@ -24,12 +24,12 @@ public class LobbyData
         if (lobbyData.ContainsKey("RelayJoinCode"))
         {
             _relayJoinCode = lobbyData["RelayJoinCode"].Value;
-         }
+        }
 
         if (lobbyData.ContainsKey("SceneName"))
         {
             _sceneName = lobbyData["SceneName"].Value;
-         }
+        }
     }
 
     public Dictionary<string, string> Serialize()

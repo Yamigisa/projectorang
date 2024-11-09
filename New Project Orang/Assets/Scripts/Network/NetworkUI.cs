@@ -9,10 +9,10 @@ public class NetworkUI : NetworkBehaviour
     [SerializeField] private TMP_Text playersCountText;
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private GameObject leaderboardPlayerPrefab; 
-    [SerializeField] private Transform leaderboardParent; 
+    [SerializeField] private GameObject leaderboardPlayerPrefab;
+    [SerializeField] private Transform leaderboardParent;
 
-    private NetworkVariable<float> remainingTime = new NetworkVariable<float>(20f, NetworkVariableReadPermission.Everyone);
+    private NetworkVariable<float> remainingTime = new NetworkVariable<float>(160f, NetworkVariableReadPermission.Everyone);
     private NetworkVariable<int> playersNum = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
 
     // Struct to store player info
@@ -37,11 +37,11 @@ public class NetworkUI : NetworkBehaviour
     private void Update()
     {
         playersCountText.text = "Players: " + playersNum.Value.ToString();
-        
+
         if (IsServer)
         {
             playersNum.Value = NetworkManager.Singleton.ConnectedClients.Count;
-            CountdownServerRPC(); 
+            CountdownServerRPC();
         }
     }
 
@@ -77,7 +77,7 @@ public class NetworkUI : NetworkBehaviour
             Time.timeScale = 0;
             gameOverPanel.SetActive(true);
         }
-        
+
         if (IsServer)
         {
             ShowLeaderboard();

@@ -7,12 +7,11 @@ public class Bullet : NetworkBehaviour
     public float bulletSpeed = 10f;
     public float bulletLifeTime = 10f;
     private Rigidbody2D rb;
+    public GameObject impactEffect;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
-
         rb.velocity = transform.up * bulletSpeed;
         rb.gravityScale = 0;
 
@@ -38,14 +37,14 @@ public class Bullet : NetworkBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Bullet collided with: " + collision.gameObject.name);
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            // Buat VFX di posisi tabrakan
+            GameObject vfx = Instantiate(impactEffect, collision.contacts[0].point, Quaternion.identity);
 
-        if (collision.gameObject.CompareTag("Obstacle") /*|| collision.gameObject.CompareTag("Bullet")*/)
-        {
-            ReflectBullet(collision);
-        }
-        else if(collision.gameObject.CompareTag("Bullet"))
-        {
+            // Hancurkan VFX setelah durasi tertentu (misalnya 1 detik)
+            Destroy(vfx, 1f);
+
             ReflectBullet(collision);
         }
         else if (collision.gameObject.CompareTag("Player"))
@@ -77,7 +76,6 @@ public class Bullet : NetworkBehaviour
         if (playerStats != null)
         {
             playerStats.TakeDamage(1);
-
         }
     }
 
