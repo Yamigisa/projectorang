@@ -21,9 +21,9 @@ public class MainMenuController : MonoBehaviour
     void Start()
     {
         createButton.onClick.AddListener(CreateLobby);
-        joinButton.onClick.AddListener(() => StartCoroutine(ActivateLobby(0.5f)));
+        joinButton.onClick.AddListener(() => StartCoroutine(ActivateLobby(1.5f)));
         submitButton.onClick.AddListener(SubmitCode);
-        backButton.onClick.AddListener(() => StartCoroutine(BackToMainMenu(0.5f)));
+        backButton.onClick.AddListener(() => StartCoroutine(BackToMainMenu(1.5f)));
     }
 
     void OnDisable()
@@ -39,9 +39,16 @@ public class MainMenuController : MonoBehaviour
         bool succeeded = await GameLobbyManager.instance.CreateLobby();
         if(succeeded)
         {
-            buttonsObject.SetActive(false);
-            lobbyPanel.SetActive(true);
+            StartCoroutine(CreateLobbyCoroutine(1f));
         }
+    }
+
+    private IEnumerator CreateLobbyCoroutine(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        buttonsObject.SetActive(false);
+        lobbyPanel.SetActive(true);
     }
 
     private async void SubmitCode()
@@ -52,7 +59,7 @@ public class MainMenuController : MonoBehaviour
         bool succeeded = await GameLobbyManager.instance.JoinLobby(code);
         if(succeeded)
         {
-            StartCoroutine(JoinLobbyAsClient(0.5f));
+            StartCoroutine(JoinLobbyAsClient(1.5f));
         }
     }
 
