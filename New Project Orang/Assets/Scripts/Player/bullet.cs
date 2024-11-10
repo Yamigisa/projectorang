@@ -39,8 +39,17 @@ public class Bullet : NetworkBehaviour
     {
         if (collision.gameObject.CompareTag("Obstacle"))
         {
-            // Buat VFX di posisi tabrakan
-            GameObject vfx = Instantiate(impactEffect, collision.contacts[0].point, Quaternion.identity);
+            var glowEffect = collision.gameObject.GetComponent<ObstacleGlowEffect>();
+            if (glowEffect != null)
+            {
+                glowEffect.TriggerGlow();
+            }
+            if (impactEffect != null)
+            {
+                GameObject vfx = Instantiate(impactEffect, collision.contacts[0].point, Quaternion.identity);
+                Destroy(vfx, 5f);
+            }
+
             ReflectBullet(collision);
         }
         else if (collision.gameObject.CompareTag("Player"))

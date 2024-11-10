@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MaterialGlow
+  m_Name: MaterialGlow 1
   m_Shader: {fileID: -6465566751694194690, guid: 6c0e0b887a10ccd45964e5b6f57c28da, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,11 +24,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Emission:
-        m_Texture: {fileID: 2800000, guid: b4cc0fc54c8b34d4893d4ecaec4563f7, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: c013254843412df48856729a49535fbf, type: 3}
+        m_Texture: {fileID: 2800000, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -47,7 +47,7 @@ Material:
     m_Floats:
     - _Thcikness: 0.18
     m_Colors:
-    - _Color: {r: 271.17398, g: 143.26172, b: 143.26172, a: 0.98039216}
+    - _Color: {r: 886.5418, g: 593.81573, b: 593.81573, a: 0.98039216}
   m_BuildTextureStacks: []
 --- !u!114 &8371760645180661862
 MonoBehaviour:
