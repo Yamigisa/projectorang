@@ -1,8 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PowerUp : MonoBehaviour
+public class PowerUp : NetworkBehaviour
 {
     public enum PowerUpType { Shotgun, BurstFire }
     public PowerUpType powerUpType;
@@ -15,8 +15,14 @@ public class PowerUp : MonoBehaviour
             if (playerShooting != null)
             {
                 playerShooting.ActivatePowerUp(powerUpType);
-                Destroy(gameObject); // Hapus power-up setelah diambil
+                DespawnPowerUpServerRpc();
             }
         }
+    }
+
+    [ServerRpc]
+    private void DespawnPowerUpServerRpc()
+    {
+        NetworkObject.Despawn();
     }
 }
