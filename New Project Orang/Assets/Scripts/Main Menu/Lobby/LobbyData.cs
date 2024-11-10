@@ -6,7 +6,7 @@ public class LobbyData
     private string _relayJoinCode;
     private string _sceneName;
 
-    public string SceneName = "Ridho 1";
+    public string SceneName = "Ridho";
 
     public string RelayJoinCode
     {

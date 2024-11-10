@@ -41,10 +41,6 @@ public class Bullet : NetworkBehaviour
         {
             // Buat VFX di posisi tabrakan
             GameObject vfx = Instantiate(impactEffect, collision.contacts[0].point, Quaternion.identity);
-
-            // Hancurkan VFX setelah durasi tertentu (misalnya 1 detik)
-            Destroy(vfx, 1f);
-
             ReflectBullet(collision);
         }
         else if (collision.gameObject.CompareTag("Player"))
