@@ -60,6 +60,16 @@ public class Bullet : NetworkBehaviour
                 DespawnBullet();
             }
         }
+        else if (collision.gameObject.CompareTag("Bullet"))
+        {
+            if (impactEffect != null)
+            {
+                GameObject vfx = Instantiate(impactEffect, collision.contacts[0].point, Quaternion.identity);
+                Destroy(vfx, 5f);
+            }
+
+            ReflectBullet(collision);
+        }
         else
         {
             if (IsServer)
@@ -73,6 +83,13 @@ public class Bullet : NetworkBehaviour
     {
         Vector2 reflectDirection = Vector2.Reflect(rb.velocity.normalized, collision.contacts[0].normal);
         rb.velocity = reflectDirection * bulletSpeed;
+        ReflectBulletClientRpc(rb.velocity); // Update all clients
+    }
+
+    [ClientRpc]
+    private void ReflectBulletClientRpc(Vector2 newVelocity)
+    {
+        rb.velocity = newVelocity;
     }
 
     private void HandlePlayerCollision(Collision2D collision)
@@ -89,6 +106,15 @@ public class Bullet : NetworkBehaviour
         if (IsSpawned)
         {
             GetComponent<NetworkObject>().Despawn();
+        }
+    }
+
+    [ClientRpc]
+    private void SpawnImpactEffectClientRpc(Vector2 position)
+    {
+        if (impactEffect != null)
+        {
+            Instantiate(impactEffect, position, Quaternion.identity);
         }
     }
 }

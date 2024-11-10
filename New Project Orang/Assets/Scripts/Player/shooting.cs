@@ -14,8 +14,13 @@ public class Shooting : NetworkBehaviour
 
     private int burstFireShots = 0;
     private float powerUpDuration = 60f;
-    
+
     private PlayerStats playerStats;
+
+    private int shotsFired = 0;
+    private float cooldownTime = 10f;
+    private float cooldownTimer = 0f;
+    private bool isCooldown = false;
 
     void Start()
     {
@@ -24,9 +29,20 @@ public class Shooting : NetworkBehaviour
 
     void Update()
     {
-        if (IsOwner) 
+        if (IsOwner)
         {
-            if(playerStats.isActive.Value)
+            // Update timer cooldown
+            if (isCooldown)
+            {
+                cooldownTimer -= Time.deltaTime;
+                if (cooldownTimer <= 0f)
+                {
+                    isCooldown = false;
+                    shotsFired = 0; // Reset jumlah tembakan setelah cooldown selesai
+                }
+            }
+
+            if (playerStats.isActive.Value && !isCooldown) // Cek cooldown sebelum menembak
             {
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -42,6 +58,14 @@ public class Shooting : NetworkBehaviour
                     else
                     {
                         Shoot();
+                    }
+
+                    // Tambahkan jumlah tembakan dan cek apakah sudah mencapai batas
+                    shotsFired++;
+                    if (shotsFired >= 6)
+                    {
+                        isCooldown = true;
+                        cooldownTimer = cooldownTime; // Mulai cooldown 10 detik
                     }
                 }
             }
@@ -108,6 +132,7 @@ public class Shooting : NetworkBehaviour
 
     public void ActivatePowerUp(PowerUp.PowerUpType powerUpType)
     {
+        shotsFired = 0;
         if (powerUpType == PowerUp.PowerUpType.Shotgun)
         {
             shotgunActive = true;
