@@ -1004,7 +1004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23478713cd6cfa74eaaacb4dc1865d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  glowColor: {r: 238.85646, g: 238.85646, b: 238.85646, a: 1}
+  glowColor: {r: 267.7491, g: 80.829926, b: 80.829926, a: 1}
   glowMultiplier: 5
   glowDuration: 0.25
 --- !u!61 &495350910
@@ -1094,7 +1094,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: c013254843412df48856729a49535fbf, type: 3}
-  m_Color: {r: 0.3019608, g: 0.92156863, b: 0.92156863, a: 1}
+  m_Color: {r: 0.31359026, g: 0.8207547, b: 0.8207547, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -2114,7 +2114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23478713cd6cfa74eaaacb4dc1865d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  glowColor: {r: 238.85646, g: 238.85646, b: 238.85646, a: 1}
+  glowColor: {r: 267.7491, g: 80.829926, b: 80.829926, a: 1}
   glowMultiplier: 5
   glowDuration: 0.25
 --- !u!61 &887647738
@@ -2204,7 +2204,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: c013254843412df48856729a49535fbf, type: 3}
-  m_Color: {r: 0.3019608, g: 0.92156863, b: 0.92156863, a: 1}
+  m_Color: {r: 0.31359026, g: 0.8207547, b: 0.8207547, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -3063,7 +3063,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23478713cd6cfa74eaaacb4dc1865d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  glowColor: {r: 238.85646, g: 238.85646, b: 238.85646, a: 1}
+  glowColor: {r: 267.7491, g: 80.829926, b: 80.829926, a: 1}
   glowMultiplier: 5
   glowDuration: 0.25
 --- !u!61 &1319850595
@@ -3153,7 +3153,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: c013254843412df48856729a49535fbf, type: 3}
-  m_Color: {r: 0.3019608, g: 0.92156863, b: 0.92156863, a: 1}
+  m_Color: {r: 0.31359026, g: 0.8207547, b: 0.8207547, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -4300,7 +4300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23478713cd6cfa74eaaacb4dc1865d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  glowColor: {r: 238.85646, g: 238.85646, b: 238.85646, a: 1}
+  glowColor: {r: 267.7491, g: 80.829926, b: 80.829926, a: 1}
   glowMultiplier: 5
   glowDuration: 0.25
 --- !u!61 &1705188298
@@ -4390,7 +4390,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: c013254843412df48856729a49535fbf, type: 3}
-  m_Color: {r: 0.3019608, g: 0.92156863, b: 0.92156863, a: 1}
+  m_Color: {r: 0.31359026, g: 0.8207547, b: 0.8207547, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
