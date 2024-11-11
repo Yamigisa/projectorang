@@ -1,14 +1,16 @@
 using System.Collections;
+using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
 {
     public static GameManager instance;
+
     public Camera mainCamera; 
+    public bool canPlay;
 
     public Transform[] spawnPoints;
 
@@ -16,6 +18,8 @@ public class GameManager : NetworkBehaviour
     {
         instance = this;
 
+        canPlay = false;
+        
         mainCamera = Camera.main;
 
         NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
