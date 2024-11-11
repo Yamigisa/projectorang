@@ -6,16 +6,18 @@ using Unity.Collections;
 
 public class NetworkUI : NetworkBehaviour
 {
-    [SerializeField] private TMP_Text playersCountText;
     [SerializeField] private TMP_Text timerText;
+    [SerializeField] private TMP_Text countdownText;
+    [SerializeField] private GameObject timerGameObject;
+    [SerializeField] private GameObject countdownGameObject;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject leaderboardPlayerPrefab;
     [SerializeField] private Transform leaderboardParent;
 
+    private NetworkVariable<bool> countdownFinished = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone);
     private NetworkVariable<float> remainingTime = new NetworkVariable<float>(160f, NetworkVariableReadPermission.Everyone);
-    private NetworkVariable<int> playersNum = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
+    private NetworkVariable<float> countdownTime = new NetworkVariable<float>(10f, NetworkVariableReadPermission.Everyone);
 
-    // Struct to store player info
     public struct PlayerInfo : INetworkSerializable
     {
         public FixedString128Bytes PlayerName;
@@ -36,17 +38,27 @@ public class NetworkUI : NetworkBehaviour
 
     private void Update()
     {
-        playersCountText.text = "Players: " + playersNum.Value.ToString();
-
         if (IsServer)
         {
-            playersNum.Value = NetworkManager.Singleton.ConnectedClients.Count;
-            CountdownServerRPC();
+            if (!countdownFinished.Value && !GameManager.instance.canPlay)
+            {
+                CountdownServerRPC();
+                timerGameObject.SetActive(false);
+            }
+            else
+            {
+                // GameManager.instance.canPlay = true;
+                // timerGameObject.SetActive(true);
+                // Time.timeScale = 1;
+                // TimerServerRPC();
+
+                CountdownFinishedClientRpc();
+            }
         }
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void CountdownServerRPC()
+    public void TimerServerRPC()
     {
         if (remainingTime.Value > 0)
         {
@@ -61,12 +73,45 @@ public class NetworkUI : NetworkBehaviour
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void CountdownServerRPC()
+    {
+        if (countdownTime.Value > 0)
+        {
+            countdownTime.Value -= Time.deltaTime;
+            UpdateCountdownTimerTextClientRPC(countdownTime.Value);
+        }
+
+        if (countdownTime.Value <= 0 && !countdownFinished.Value)
+        {
+            countdownTime.Value = 0;
+            countdownFinished.Value = true;
+            CountdownFinishedClientRpc();
+        }
+    }
+
+    [ClientRpc]
+    private void CountdownFinishedClientRpc()
+    {
+        GameManager.instance.canPlay = true;
+        countdownGameObject.SetActive(false);
+        timerGameObject.SetActive(true);
+        TimerServerRPC();
+    }
+
     [ClientRpc]
     private void UpdateTimerTextClientRPC(float time)
     {
         int minutes = Mathf.FloorToInt(time / 60);
         int seconds = Mathf.FloorToInt(time % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    [ClientRpc]
+    private void UpdateCountdownTimerTextClientRPC(float time)
+    {
+        int seconds = Mathf.FloorToInt(time % 60);
+        countdownText.text = string.Format("{0:00}", seconds);
     }
 
     [ClientRpc]
@@ -84,7 +129,6 @@ public class NetworkUI : NetworkBehaviour
         }
     }
 
-    // Gather and send leaderboard data to clients
     private void ShowLeaderboard()
     {
         List<PlayerInfo> leaderboardData = new List<PlayerInfo>();
