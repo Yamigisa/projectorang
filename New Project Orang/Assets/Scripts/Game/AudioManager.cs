@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
@@ -18,10 +17,11 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // private void Start()
-    // {
-    //     PlayMusic("Game Theme");
-    // }
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene().name == "Main Menu")
+            PlayMusic("Main Menu Theme");
+    }
     public void PlayMusic(string name)
     {
         Sound s = Array.Find(musicSounds, x=> x.name == name);

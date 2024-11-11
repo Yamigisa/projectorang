@@ -29,12 +29,14 @@ public class PlayerStats : NetworkBehaviour
 
         if (health <= 0)
         {
+            AudioManager.instance.PlaySFX("Die");
             Die();
         }
     }
 
     private void Die()
     {
+        AudioManager.instance.PlaySFX("Die");
         shooting.cooldownTimer = 0f;
         GameManager.instance.ShakeCameraClientRpc(GetComponent<NetworkObject>().NetworkObjectId);
         AddScore(false,100);
@@ -44,7 +46,9 @@ public class PlayerStats : NetworkBehaviour
 
     public void UpdatePosition()
     {
-        playerMovement.UpdatePositionServerRPC(GameManager.instance.GetSpawnPoint((int)OwnerClientId).position, GameManager.instance.GetSpawnPoint((int)OwnerClientId).rotation );
+        var spawnPoint = GameManager.instance.GetSpawnPoint((int)OwnerClientId);
+
+        playerMovement.UpdatePositionServerRPC(spawnPoint.position, spawnPoint.rotation);
     }
     private void OnEnable()
     {

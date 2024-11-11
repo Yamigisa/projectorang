@@ -47,6 +47,7 @@ public class Shooting : NetworkBehaviour
                 {
                     if (Input.GetMouseButtonDown(0))
                     {
+                        AudioManager.instance.PlaySFX("Shoot");
                         if (shotgunActive)
                         {
                             ShootShotgun();
@@ -78,10 +79,12 @@ public class Shooting : NetworkBehaviour
     {
         if (IsServer)
         {
+            AudioManager.instance.PlaySFX("Shoot");
             SpawnBullet(firePoint.position, firePoint.rotation);
         }
         else
         {
+            AudioManager.instance.PlaySFX("Shoot");
             ShootServerRpc(firePoint.position, firePoint.rotation);
         }
     }
@@ -120,11 +123,13 @@ public class Shooting : NetworkBehaviour
     [ServerRpc]
     void ShootServerRpc(Vector3 position, Quaternion rotation)
     {
+        AudioManager.instance.PlaySFX("Shoot");
         SpawnBullet(position, rotation);
     }
 
     void SpawnBullet(Vector3 position, Quaternion rotation)
     {
+        AudioManager.instance.PlaySFX("Shoot");
         GameObject bullet = Instantiate(bulletPrefab, position, rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.velocity = bullet.transform.up * bulletSpeed;

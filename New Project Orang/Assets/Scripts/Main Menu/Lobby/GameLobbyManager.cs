@@ -38,7 +38,7 @@ namespace game
 
         public async Task<bool> CreateLobby()
         {
-            playerCount = 1;  // Host is the first player
+            playerCount = 1; 
             localLobbyPlayerData = new LobbyPlayerData();
             localLobbyPlayerData.Initialize(AuthenticationService.Instance.PlayerId, $"Player {playerCount}");
 
@@ -65,7 +65,7 @@ namespace game
 
         public async Task<bool> JoinLobby(string code)
         {
-            playerCount++;  // Increment player count for each new join
+            playerCount++; 
             localLobbyPlayerData = new LobbyPlayerData();
             localLobbyPlayerData.Initialize(AuthenticationService.Instance.PlayerId, $"Player {playerCount}");
 

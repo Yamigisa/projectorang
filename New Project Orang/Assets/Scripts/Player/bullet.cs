@@ -81,14 +81,16 @@ public class Bullet : NetworkBehaviour
 
     private void ReflectBullet(Collision2D collision)
     {
+        
         Vector2 reflectDirection = Vector2.Reflect(rb.velocity.normalized, collision.contacts[0].normal);
         rb.velocity = reflectDirection * bulletSpeed;
-        ReflectBulletClientRpc(rb.velocity); // Update all clients
+        ReflectBulletClientRpc(rb.velocity); 
     }
 
     [ClientRpc]
     private void ReflectBulletClientRpc(Vector2 newVelocity)
     {
+        AudioManager.instance.PlaySFX("Bullet Bounce");
         rb.velocity = newVelocity;
     }
 

@@ -52,6 +52,7 @@ public class GameManager : NetworkBehaviour
 
     public IEnumerator RespawnCoroutine(PlayerStats playerStats)
     {
+        AudioManager.instance.PlaySFX("Die");
         yield return new WaitForSeconds(2f); 
 
         playerStats.health = 1; 
@@ -66,6 +67,7 @@ public class GameManager : NetworkBehaviour
     {
         if (NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(NetworkManager.Singleton.LocalClientId).NetworkObjectId == networkObjectId)
         {
+            AudioManager.instance.PlaySFX("Die");
             StartCoroutine(CameraShakeCoroutine());
         }
     }

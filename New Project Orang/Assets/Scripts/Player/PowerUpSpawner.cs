@@ -24,7 +24,6 @@ public class PowerUpSpawner : NetworkBehaviour
             Vector2 spawnPosition = new Vector2(Random.Range(-10f, 10f), Random.Range(-10f, 10f));
             int randomPowerUp = Random.Range(0, powerUpPrefabs.Length);
 
-            // Call the ClientRpc to notify all clients to spawn the power-up
             SpawnPowerUpClientRpc(spawnPosition, randomPowerUp);
         }
     }
