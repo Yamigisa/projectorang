@@ -337,6 +337,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1140973810854168156, guid: cf1065dc0dbe78741b7080f54a27b958, type: 3}
   firePoint: {fileID: 2709003996649844515}
   bulletSpeed: 10
+  cooldownTimer: 0
 --- !u!114 &7734686843871552817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,8 +551,8 @@ MonoBehaviour:
         byte0124: 0
         byte0125: 0
   color:
-  - {r: 0, g: 0, b: 0, a: 1}
   - {r: 0.83396226, g: 0.13060157, b: 0.13060157, a: 1}
+  - {r: 1, g: 0.9553493, b: 0.34528297, a: 1}
   - {r: 0.37945884, g: 0.7795352, b: 0.78867924, a: 1}
   - {r: 0.78584504, g: 0.32299745, b: 0.8113208, a: 1}
   playerStats: {fileID: 0}

@@ -21,7 +21,7 @@ public class GameManager : NetworkBehaviour
         canPlay = false;
         
         mainCamera = Camera.main;
-
+        
         NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
         if(RelayManager.instance.isHost)
         {

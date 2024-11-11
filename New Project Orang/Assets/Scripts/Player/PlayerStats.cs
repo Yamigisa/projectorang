@@ -9,9 +9,11 @@ public class PlayerStats : NetworkBehaviour
     public NetworkVariable<int> score = new NetworkVariable<int>();
 
     private PlayerMovement playerMovement;
+    private Shooting shooting;
     private void Start()
     {
-        playerMovement = GetComponent<PlayerMovement>();    
+        playerMovement = GetComponent<PlayerMovement>(); 
+        shooting = GetComponent<Shooting>();   
         SetRendererActive(isActive.Value);
     }
 
@@ -33,6 +35,7 @@ public class PlayerStats : NetworkBehaviour
 
     private void Die()
     {
+        shooting.cooldownTimer = 0f;
         GameManager.instance.ShakeCameraClientRpc(GetComponent<NetworkObject>().NetworkObjectId);
         AddScore(false,100);
         isActive.Value = false;

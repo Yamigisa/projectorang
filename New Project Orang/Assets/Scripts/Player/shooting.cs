@@ -19,7 +19,7 @@ public class Shooting : NetworkBehaviour
 
     private int shotsFired = 0;
     private float cooldownTime = 10f;
-    private float cooldownTimer = 0f;
+    public float cooldownTimer = 0f;
     private bool isCooldown = false;
 
     void Start()
@@ -31,41 +31,43 @@ public class Shooting : NetworkBehaviour
     {
         if (IsOwner)
         {
-            // Update timer cooldown
-            if (isCooldown)
+            if(GameManager.instance.canPlay)
             {
-                cooldownTimer -= Time.deltaTime;
-                if (cooldownTimer <= 0f)
+                if (isCooldown)
                 {
-                    isCooldown = false;
-                    shotsFired = 0;
+                    cooldownTimer -= Time.deltaTime;
+                    if (cooldownTimer <= 0f)
+                    {
+                        isCooldown = false;
+                        shotsFired = 0;
+                    }
                 }
-            }
 
-            if (playerStats.isActive.Value && !isCooldown)
-            {
-                if (Input.GetMouseButtonDown(0))
+                if (playerStats.isActive.Value && !isCooldown)
                 {
-                    if (shotgunActive)
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        ShootShotgun();
-                    }
-                    else if (burstFireActive && burstFireShots < 6)
-                    {
-                        StartCoroutine(ShootBurstFire());
-                        burstFireShots++;
-                    }
-                    else
-                    {
-                        Shoot();
-                    }
+                        if (shotgunActive)
+                        {
+                            ShootShotgun();
+                        }
+                        else if (burstFireActive && burstFireShots < 6)
+                        {
+                            StartCoroutine(ShootBurstFire());
+                            burstFireShots++;
+                        }
+                        else
+                        {
+                            Shoot();
+                        }
 
-                    // Tambahkan jumlah tembakan dan cek apakah sudah mencapai batas
-                    shotsFired++;
-                    if (shotsFired >= 6)
-                    {
-                        isCooldown = true;
-                        cooldownTimer = cooldownTime; // Mulai cooldown 10 detik
+                        // Tambahkan jumlah tembakan dan cek apakah sudah mencapai batas
+                        shotsFired++;
+                        if (shotsFired >= 6)
+                        {
+                            isCooldown = true;
+                            cooldownTimer = cooldownTime; // Mulai cooldown 10 detik
+                        }
                     }
                 }
             }

@@ -29,30 +29,27 @@ public class PlayerMovement : NetworkBehaviour
 
     void Update()
     {
-        if (IsOwner )
+        if (IsOwner)
         {
-            if(GameManager.instance.canPlay)
-                {
-                float horizontalInput = Input.GetAxis("Horizontal");
-                float verticalInput = Input.GetAxis("Vertical");
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
 
-                movementDirection = new Vector3(horizontalInput, verticalInput, 0).normalized;
+            movementDirection = new Vector3(horizontalInput, verticalInput, 0).normalized;
 
-                Vector3 newPosition = transform.position + movementDirection * movementSpeed * Time.deltaTime;
-                transform.position = Vector3.Lerp(transform.position, newPosition, smoothTime);
+            Vector3 newPosition = transform.position + movementDirection * movementSpeed * Time.deltaTime;
+            transform.position = Vector3.Lerp(transform.position, newPosition, smoothTime);
 
-                if (movementDirection != Vector3.zero)
-                {
-                    float angle = Mathf.Atan2(movementDirection.y, movementDirection.x) * Mathf.Rad2Deg;
-                    Quaternion newRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
-                    transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
-                }
-                timeSinceLastUpdate += Time.deltaTime;
-                if (timeSinceLastUpdate >= updateInterval)
-                {
-                    UpdatePositionServerRPC(transform.position, transform.rotation);
-                    timeSinceLastUpdate = 0f;
-                }
+            if (movementDirection != Vector3.zero)
+            {
+                float angle = Mathf.Atan2(movementDirection.y, movementDirection.x) * Mathf.Rad2Deg;
+                Quaternion newRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+                transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
+            }
+            timeSinceLastUpdate += Time.deltaTime;
+            if (timeSinceLastUpdate >= updateInterval)
+            {
+                UpdatePositionServerRPC(transform.position, transform.rotation);
+                timeSinceLastUpdate = 0f;
             }
         }
         else

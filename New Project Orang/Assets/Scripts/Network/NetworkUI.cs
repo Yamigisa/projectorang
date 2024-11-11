@@ -13,8 +13,9 @@ public class NetworkUI : NetworkBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject leaderboardPlayerPrefab;
     [SerializeField] private Transform leaderboardParent;
-
+    
     private NetworkVariable<bool> countdownFinished = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone);
+    private NetworkVariable<bool> isSongPlaying = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone);
     private NetworkVariable<float> remainingTime = new NetworkVariable<float>(160f, NetworkVariableReadPermission.Everyone);
     private NetworkVariable<float> countdownTime = new NetworkVariable<float>(10f, NetworkVariableReadPermission.Everyone);
 
@@ -45,7 +46,7 @@ public class NetworkUI : NetworkBehaviour
                 CountdownServerRPC();
                 timerGameObject.SetActive(false);
             }
-            else
+            else if(countdownFinished.Value)
             {
                 // GameManager.instance.canPlay = true;
                 // timerGameObject.SetActive(true);
@@ -78,6 +79,7 @@ public class NetworkUI : NetworkBehaviour
     {
         if (countdownTime.Value > 0)
         {
+            timerGameObject.SetActive(false);
             countdownTime.Value -= Time.deltaTime;
             UpdateCountdownTimerTextClientRPC(countdownTime.Value);
         }
@@ -93,6 +95,11 @@ public class NetworkUI : NetworkBehaviour
     [ClientRpc]
     private void CountdownFinishedClientRpc()
     {
+        if(isSongPlaying.Value)
+        {
+            AudioManager.instance.PlayMusic("Game Theme");
+            isSongPlaying.Value = false;
+        }
         GameManager.instance.canPlay = true;
         countdownGameObject.SetActive(false);
         timerGameObject.SetActive(true);
