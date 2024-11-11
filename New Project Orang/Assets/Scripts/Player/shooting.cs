@@ -38,11 +38,11 @@ public class Shooting : NetworkBehaviour
                 if (cooldownTimer <= 0f)
                 {
                     isCooldown = false;
-                    shotsFired = 0; // Reset jumlah tembakan setelah cooldown selesai
+                    shotsFired = 0;
                 }
             }
 
-            if (playerStats.isActive.Value && !isCooldown) // Cek cooldown sebelum menembak
+            if (playerStats.isActive.Value && !isCooldown)
             {
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -133,6 +133,7 @@ public class Shooting : NetworkBehaviour
     public void ActivatePowerUp(PowerUp.PowerUpType powerUpType)
     {
         shotsFired = 0;
+        cooldownTimer = 0f;
         if (powerUpType == PowerUp.PowerUpType.Shotgun)
         {
             shotgunActive = true;
