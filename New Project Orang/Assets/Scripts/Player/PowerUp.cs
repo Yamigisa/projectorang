@@ -14,6 +14,7 @@ public class PowerUp : NetworkBehaviour
             Shooting playerShooting = collision.GetComponent<Shooting>();
             if (playerShooting != null)
             {
+                Debug.Log("power up: " + powerUpType);
                 playerShooting.ActivatePowerUp(powerUpType);
                 DespawnPowerUpServerRpc();
             }
