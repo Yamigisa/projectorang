@@ -65,7 +65,7 @@ public class Bullet : NetworkBehaviour
             if (impactEffect != null)
             {
                 GameObject vfx = Instantiate(impactEffect, collision.contacts[0].point, Quaternion.identity);
-                Destroy(vfx, 5f);
+                Destroy(vfx, 2f);
             }
 
             ReflectBullet(collision);
@@ -81,10 +81,10 @@ public class Bullet : NetworkBehaviour
 
     private void ReflectBullet(Collision2D collision)
     {
-        
+
         Vector2 reflectDirection = Vector2.Reflect(rb.velocity.normalized, collision.contacts[0].normal);
         rb.velocity = reflectDirection * bulletSpeed;
-        ReflectBulletClientRpc(rb.velocity); 
+        ReflectBulletClientRpc(rb.velocity);
     }
 
     [ClientRpc]
