@@ -126,7 +126,8 @@ public class NetworkUI : NetworkBehaviour
     {
         if (gameOverPanel != null)
         {
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
+            GameManager.instance.canPlay = false;
             gameOverPanel.SetActive(true);
         }
 
