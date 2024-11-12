@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Shooting : NetworkBehaviour
 {
@@ -42,6 +43,17 @@ public class Shooting : NetworkBehaviour
                         shotsFired = 0;
                     }
                 }
+                if (!playerStats.isActive.Value)
+            {
+                if (shotgunActive)
+                {
+                    DeactivePowerUp(PowerUp.PowerUpType.Shotgun);
+                }
+                if (burstFireActive)
+                {
+                    DeactivePowerUp(PowerUp.PowerUpType.BurstFire);
+                }
+            }
 
                 if (playerStats.isActive.Value && !isCooldown)
                 {
@@ -139,6 +151,7 @@ public class Shooting : NetworkBehaviour
 
     public void ActivatePowerUp(PowerUp.PowerUpType powerUpType)
     {
+        ResetActivePowerUps();
         shotsFired = 0;
         cooldownTimer = 0f;
         if (powerUpType == PowerUp.PowerUpType.Shotgun)
@@ -153,6 +166,30 @@ public class Shooting : NetworkBehaviour
             StartCoroutine(ResetPowerUpAfterDuration(() => burstFireActive = false));
         }
     }
+
+    public void DeactivePowerUp(PowerUp.PowerUpType powerUpType){
+        if (!playerStats.isActive.Value)
+    {
+        Debug.LogWarning("Power mati");
+        if (powerUpType == PowerUp.PowerUpType.Shotgun)
+        {
+            shotgunActive = false;
+        }
+        else if (powerUpType == PowerUp.PowerUpType.BurstFire)
+        {
+            burstFireActive = false;
+            burstFireShots = 0;
+        }
+    }
+    
+    }
+    private void ResetActivePowerUps()
+{
+    // Nonaktifkan semua power-up
+    shotgunActive = false;
+    burstFireActive = false;
+    burstFireShots = 0;
+}
 
     private IEnumerator ResetPowerUpAfterDuration(System.Action onComplete)
     {

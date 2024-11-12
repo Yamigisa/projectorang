@@ -16,7 +16,7 @@ public class NetworkUI : NetworkBehaviour
     
     private NetworkVariable<bool> countdownFinished = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone);
     private NetworkVariable<bool> isSongPlaying = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone);
-    private NetworkVariable<float> remainingTime = new NetworkVariable<float>(160f, NetworkVariableReadPermission.Everyone);
+    private NetworkVariable<float> remainingTime = new NetworkVariable<float>(420f, NetworkVariableReadPermission.Everyone);
     private NetworkVariable<float> countdownTime = new NetworkVariable<float>(10f, NetworkVariableReadPermission.Everyone);
 
     public struct PlayerInfo : INetworkSerializable
