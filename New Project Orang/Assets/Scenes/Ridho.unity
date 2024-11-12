@@ -223,7 +223,7 @@ MonoBehaviour:
   powerUpPrefabs:
   - {fileID: 3463247844923958671, guid: 486959a09ef94b846a5e9fef47dbf31c, type: 3}
   - {fileID: 7654384270197765655, guid: a70bbc811e6bbfc44893e16417dd82b2, type: 3}
-  spawnInterval: 10
+  spawnInterval: 22
 --- !u!4 &197588705
 Transform:
   m_ObjectHideFlags: 0
