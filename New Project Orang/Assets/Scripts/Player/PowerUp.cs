@@ -9,6 +9,8 @@ public class PowerUp : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!IsServer) return; // Pastikan hanya server yang mengeksekusi OnTriggerEnter2D
+
         if (collision.CompareTag("Player"))
         {
             Shooting playerShooting = collision.GetComponent<Shooting>();
@@ -21,9 +23,10 @@ public class PowerUp : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void DespawnPowerUpServerRpc()
     {
+        Debug.Log("Despawn power up");
         NetworkObject.Despawn();
     }
 }
